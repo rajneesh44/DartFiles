@@ -9,7 +9,9 @@ void main(){
 class MyApp extends StatelessWidget {
   Widget build(context){
     return MaterialApp(
-      theme:ThemeData.dark(),
+      theme:ThemeData(
+        primarySwatch: Colors.deepOrange,
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: Text('New App'),
