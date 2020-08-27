@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/custom_dialog.dart';
 import 'package:tic_tac_toe/game_button.dart';
@@ -53,8 +55,33 @@ class _HomePageState extends State<HomePage> {
         player2.add(gb.id);
       }
     gb.enabled = false ;
-    checkWinner();
+    int winner  = checkWinner();
+    if(winner==-1)
+        if(buttonsList.every((p) => p.text!="")) { // check if all ids are filled
+          showDialog(
+              context: context,
+              builder: (_) =>
+                  CustomDialog(
+                      "Game Tied", "Press the reset button", resetGame));
+        }else{
+          activePlayer==2 ? autoPlay() : null ;
+        }
     });
+  }
+
+  void autoPlay(){
+    var emptyCells = List();
+    var list = List.generate(9, (i)=>i+1);
+    for (var cellID in list){
+      if(!(player1.contains(cellID) || player2.contains(cellID))){
+        emptyCells.add(cellID);
+      }
+    }
+    var r  = Random();
+    var randIndex = r.nextInt(emptyCells.length-1);
+    var cellID = emptyCells[randIndex];
+    int i = buttonsList.indexWhere((p) => p.id==cellID);
+    playGame(buttonsList[i]);
   }
 
   int checkWinner(){
@@ -93,6 +120,7 @@ class _HomePageState extends State<HomePage> {
         );
       }
     }
+    return winner;
   }
 
   void resetGame(){
@@ -108,6 +136,21 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Tic Tac Toe'),
       ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Container(
+                height: 120.0,
+              child: DrawerHeader(
+                child : Text('Play Game'),
+                decoration : BoxDecoration(color: Colors.orange),
+              ),),
+              ListTile(title: Text('Item 1'),),
+              ListTile(title: Text('Item 2'),),
+              ],
+          ),
+        ),
         body : Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
