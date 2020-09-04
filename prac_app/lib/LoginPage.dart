@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './Camera.dart';
 
 class LoginPage extends StatefulWidget{
   @override
@@ -6,6 +7,9 @@ class LoginPage extends StatefulWidget{
 }
 
 class _LoginPage extends State<LoginPage>{
+  final nameController = TextEditingController();
+  final password = TextEditingController();
+  String pass;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +28,7 @@ class _LoginPage extends State<LoginPage>{
             Container(
               padding: EdgeInsets.all(10.0),
               child: TextField(
+                controller: nameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'User Name',
@@ -33,12 +38,15 @@ class _LoginPage extends State<LoginPage>{
             Container(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: TextField(
+                controller: password,
+                onSubmitted:(password)=>pass = password,
                 obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Password',
                 ),
               ),
+
             ),
             FlatButton(
               onPressed: (){
@@ -55,8 +63,27 @@ class _LoginPage extends State<LoginPage>{
                 color: Colors.blue,
                 child: Text('Login'),
                 onPressed: () {
-//                  print(nameController.text);
-//                  print(passwordController.text);
+                  if(nameController.text=="rajneesh" && pass=="rajneesh"){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Camera()),
+                    );
+                  }
+                  else{
+                    return showDialog(
+                      context: context,
+                      builder: (context) {
+                      return AlertDialog(
+                        // Retrieve the text the that user has entered by using the
+                        // TextEditingController.
+                        content: Text("Either password or Username is wrong!"),
+                      );
+                    },
+                  );
+                }
+                  print(nameController.text);
+                  print(password.text);
+                  print(pass);
                 },)
             ),
             Container(
